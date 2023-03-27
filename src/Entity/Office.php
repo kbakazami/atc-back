@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OfficeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,18 @@ class Office
 
     #[ORM\ManyToOne(inversedBy: 'officeid')]
     private ?Review $review = null;
+
+    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
+    private Collection $invoices;
+
+    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->invoices = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -96,6 +110,66 @@ class Office
     public function setReview(?Review $review): self
     {
         $this->review = $review;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): self
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setOfficeid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): self
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getOfficeid() === $this) {
+                $invoice->setOfficeid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setOfficeid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getOfficeid() === $this) {
+                $reservation->setOfficeid(null);
+            }
+        }
 
         return $this;
     }
