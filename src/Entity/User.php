@@ -49,10 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    public function __construct()
-    {
-        $this->offices = new ArrayCollection();
-    }
+
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;

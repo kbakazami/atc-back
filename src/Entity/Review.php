@@ -99,26 +99,4 @@ class Review
     {
         return $this->officeid;
     }
-
-    public function addOfficeid(Office $officeid): self
-    {
-        if (!$this->officeid->contains($officeid)) {
-            $this->officeid->add($officeid);
-            $officeid->setReview($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOfficeid(Office $officeid): self
-    {
-        if ($this->officeid->removeElement($officeid)) {
-            // set the owning side to null (unless already changed)
-            if ($officeid->getReview() === $this) {
-                $officeid->setReview(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -107,12 +107,7 @@ class Office
         return $this->review;
     }
 
-    public function setReview(?Review $review): self
-    {
-        $this->review = $review;
 
-        return $this;
-    }
 
     /**
      * @return Collection<int, Invoice>
