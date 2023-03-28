@@ -21,17 +21,19 @@ class Review
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $message = null;
 
-    #[ORM\OneToMany(mappedBy: 'review', targetEntity: User::class)]
-    private Collection $userid;
+    #[ORM\Column(nullable: true)]
+    private ?int $note = null;
 
-    #[ORM\OneToMany(mappedBy: 'review', targetEntity: Office::class)]
-    private Collection $officeid;
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userid = null;
 
-    public function __construct()
-    {
-        $this->userid = new ArrayCollection();
-        $this->officeid = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    private ?Office $officeid = null;
+
+
+
+
 
     public function getId(): ?int
     {
@@ -62,41 +64,39 @@ class Review
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUserid(): Collection
+    public function getNote(): ?int
+    {
+        return $this->note;
+    }
+
+    public function setNote(?int $note): self
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getUserid(): ?User
     {
         return $this->userid;
     }
 
-    public function addUserid(User $userid): self
+    public function setUserid(?User $userid): self
     {
-        if (!$this->userid->contains($userid)) {
-            $this->userid->add($userid);
-            $userid->setReview($this);
-        }
+        $this->userid = $userid;
 
         return $this;
     }
 
-    public function removeUserid(User $userid): self
-    {
-        if ($this->userid->removeElement($userid)) {
-            // set the owning side to null (unless already changed)
-            if ($userid->getReview() === $this) {
-                $userid->setReview(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Office>
-     */
-    public function getOfficeid(): Collection
+    public function getOfficeid(): ?Office
     {
         return $this->officeid;
+    }
+
+    public function setOfficeid(?Office $officeid): self
+    {
+        $this->officeid = $officeid;
+
+        return $this;
     }
 }

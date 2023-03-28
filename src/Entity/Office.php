@@ -16,8 +16,6 @@ class Office
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $officeid = null;
 
     #[ORM\Column]
     private ?int $price = null;
@@ -27,6 +25,9 @@ class Office
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $duration = null;
+
+    #[ORM\ManyToOne(inversedBy: 'officeid')]
+    private ?Review $review = null;
 
     #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
     private Collection $invoices;
@@ -46,6 +47,7 @@ class Office
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
 
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
@@ -55,17 +57,9 @@ class Office
         return $this->id;
     }
 
-    public function getOfficeid(): ?int
-    {
-        return $this->officeid;
-    }
 
-    public function setOfficeid(int $officeid): self
-    {
-        $this->officeid = $officeid;
 
-        return $this;
-    }
+
 
     public function getPrice(): ?int
     {
@@ -103,10 +97,7 @@ class Office
         return $this;
     }
 
-    public function getReview(): ?Review
-    {
-        return $this->review;
-    }
+
 
 
 
@@ -190,6 +181,36 @@ class Office
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setOfficeid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getOfficeid() === $this) {
+                $review->setOfficeid(null);
+            }
+        }
 
         return $this;
     }

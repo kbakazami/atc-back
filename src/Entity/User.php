@@ -31,6 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\ManyToOne(inversedBy: 'userid')]
+    private ?Review $review = null;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Office::class)]
     private Collection $offices;
 
@@ -52,11 +55,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Review::class, orphanRemoval: true)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->offices = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +136,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+
+    public function setReview(?Review $review): self
+    {
+        $this->review = $review;
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Office>
@@ -262,6 +276,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($reservation->getUser() === $this) {
                 $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getUserid() === $this) {
+                $review->setUserid(null);
             }
         }
 
