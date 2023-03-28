@@ -46,18 +46,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
+    private Collection $invoices;
+
+    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->offices = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }
-       
-    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
-    private Collection $invoices;
-
-    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
-    private Collection $reservations;
 
     public function getId(): ?int
     {
@@ -264,6 +264,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $reservation->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

@@ -46,6 +46,10 @@ class Office
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -186,6 +190,18 @@ class Office
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
