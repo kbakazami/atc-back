@@ -46,17 +46,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    public function __construct()
+    {
+        $this->offices = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+    }
+       
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
-
-    public function __construct()
-    {
-        $this->invoices = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -219,7 +220,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->invoices->contains($invoice)) {
             $this->invoices->add($invoice);
-            $invoice->setUserid($this);
+            $invoice->setUser($this);
         }
 
         return $this;
@@ -229,8 +230,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->invoices->removeElement($invoice)) {
             // set the owning side to null (unless already changed)
-            if ($invoice->getUserid() === $this) {
-                $invoice->setUserid(null);
+            if ($invoice->getUser() === $this) {
+                $invoice->setUser(null);
             }
         }
 
@@ -249,7 +250,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
-            $reservation->setUserid($this);
+            $reservation->setUser($this);
         }
 
         return $this;
@@ -259,8 +260,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getUserid() === $this) {
-                $reservation->setUserid(null);
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
             }
         }
 
