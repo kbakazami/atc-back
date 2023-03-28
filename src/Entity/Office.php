@@ -39,6 +39,7 @@ class Office
     {
         $this->invoices = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -46,6 +47,9 @@ class Office
 
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Review::class)]
+    private Collection $reviews;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
