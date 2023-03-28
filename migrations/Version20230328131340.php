@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230328122550 extends AbstractMigration
+final class Version20230328131340 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,7 +22,7 @@ final class Version20230328122550 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE company (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, address LONGTEXT NOT NULL, logo VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone_number VARCHAR(255) NOT NULL, siret VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE invoice (id INT AUTO_INCREMENT NOT NULL, userid_id INT NOT NULL, officeid_id INT NOT NULL, INDEX IDX_9065174458E0A285 (userid_id), INDEX IDX_90651744CF8E4540 (officeid_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE office (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, officeid INT NOT NULL, price INT NOT NULL, surface NUMERIC(10, 0) NOT NULL, duration VARCHAR(255) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, INDEX IDX_74516B02A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE office (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, price INT NOT NULL, surface NUMERIC(10, 0) NOT NULL, duration VARCHAR(255) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, INDEX IDX_74516B02A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reservation (id INT AUTO_INCREMENT NOT NULL, userid_id INT NOT NULL, officeid_id INT NOT NULL, invoiceid_id INT NOT NULL, date DATE NOT NULL, time_slot VARCHAR(255) NOT NULL, INDEX IDX_42C8495558E0A285 (userid_id), INDEX IDX_42C84955CF8E4540 (officeid_id), INDEX IDX_42C8495520A48C29 (invoiceid_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE review (id INT AUTO_INCREMENT NOT NULL, userid_id INT NOT NULL, officeid_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, message VARCHAR(255) DEFAULT NULL, note INT DEFAULT NULL, INDEX IDX_794381C658E0A285 (userid_id), INDEX IDX_794381C6CF8E4540 (officeid_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE `user` (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, telephone_number VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
