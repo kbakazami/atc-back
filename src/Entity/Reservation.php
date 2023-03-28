@@ -16,11 +16,11 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userid = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Office $officeid = null;
+    private ?Office $office = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
@@ -30,33 +30,33 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Invoice $invoiceid = null;
+    private ?Invoice $invoice = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserid(): ?User
+    public function getUser(): ?User
     {
-        return $this->userid;
+        return $this->user;
     }
 
-    public function setUserid(?User $userid): self
+    public function setUser(?User $user): self
     {
-        $this->userid = $userid;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getOfficeid(): ?Office
+    public function getOffice(): ?Office
     {
-        return $this->officeid;
+        return $this->office;
     }
 
-    public function setOfficeid(?Office $officeid): self
+    public function setOffice(?Office $office): self
     {
-        $this->officeid = $officeid;
+        $this->office = $office;
 
         return $this;
     }
@@ -85,14 +85,14 @@ class Reservation
         return $this;
     }
 
-    public function getInvoiceid(): ?Invoice
+    public function getInvoice(): ?Invoice
     {
-        return $this->invoiceid;
+        return $this->invoice;
     }
 
-    public function setInvoiceid(?Invoice $invoiceid): self
+    public function setInvoice(?Invoice $invoice): self
     {
-        $this->invoiceid = $invoiceid;
+        $this->invoice = $invoice;
 
         return $this;
     }

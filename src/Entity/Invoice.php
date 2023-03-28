@@ -17,11 +17,11 @@ class Invoice
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userid = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Office $officeid = null;
+    private ?Office $office = null;
 
     #[ORM\OneToMany(mappedBy: 'invoiceid', targetEntity: Reservation::class)]
     private Collection $reservations;
@@ -36,26 +36,26 @@ class Invoice
         return $this->id;
     }
 
-    public function getUserid(): ?User
+    public function getUser(): ?User
     {
-        return $this->userid;
+        return $this->user;
     }
 
-    public function setUserid(?User $userid): self
+    public function setUser(?User $user): self
     {
-        $this->userid = $userid;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getOfficeid(): ?Office
+    public function getOffice(): ?Office
     {
-        return $this->officeid;
+        return $this->office;
     }
 
-    public function setOfficeid(?Office $officeid): self
+    public function setOffice(?Office $office): self
     {
-        $this->officeid = $officeid;
+        $this->office = $office;
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Invoice
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
-            $reservation->setInvoiceid($this);
+            $reservation->setInvoice($this);
         }
 
         return $this;
@@ -82,8 +82,8 @@ class Invoice
     {
         if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getInvoiceid() === $this) {
-                $reservation->setInvoiceid(null);
+            if ($reservation->getInvoice() === $this) {
+                $reservation->setInvoice(null);
             }
         }
 

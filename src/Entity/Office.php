@@ -118,7 +118,7 @@ class Office
     {
         if (!$this->invoices->contains($invoice)) {
             $this->invoices->add($invoice);
-            $invoice->setOfficeid($this);
+            $invoice->setOffice($this);
         }
 
         return $this;
@@ -128,8 +128,8 @@ class Office
     {
         if ($this->invoices->removeElement($invoice)) {
             // set the owning side to null (unless already changed)
-            if ($invoice->getOfficeid() === $this) {
-                $invoice->setOfficeid(null);
+            if ($invoice->getOffice() === $this) {
+                $invoice->setOffice(null);
             }
         }
 
@@ -148,7 +148,7 @@ class Office
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
-            $reservation->setOfficeid($this);
+            $reservation->setOffice($this);
         }
 
         return $this;
@@ -158,8 +158,8 @@ class Office
     {
         if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getOfficeid() === $this) {
-                $reservation->setOfficeid(null);
+            if ($reservation->getOffice() === $this) {
+                $reservation->setOffice(null);
             }
         }
 
