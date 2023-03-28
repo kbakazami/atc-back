@@ -28,8 +28,6 @@ class Office
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $duration = null;
 
-    #[ORM\ManyToOne(inversedBy: 'officeid')]
-    private ?Review $review = null;
 
     #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
     private Collection $invoices;
@@ -41,6 +39,7 @@ class Office
     {
         $this->invoices = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -48,6 +47,9 @@ class Office
 
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Review::class)]
+    private Collection $reviews;
 
     public function getId(): ?int
     {
@@ -102,10 +104,7 @@ class Office
         return $this;
     }
 
-    public function getReview(): ?Review
-    {
-        return $this->review;
-    }
+
 
 
 
@@ -189,6 +188,36 @@ class Office
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setOfficeid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getOfficeid() === $this) {
+                $review->setOfficeid(null);
+            }
+        }
 
         return $this;
     }
