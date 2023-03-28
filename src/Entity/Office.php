@@ -28,9 +28,6 @@ class Office
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $duration = null;
 
-    #[ORM\ManyToOne(inversedBy: 'officeid')]
-    private ?Review $review = null;
-
     #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
     private Collection $invoices;
 

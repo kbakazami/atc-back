@@ -31,9 +31,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userid')]
-    private ?Review $review = null;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Office::class)]
     private Collection $offices;
 
@@ -48,8 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
-
-
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
@@ -133,17 +128,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getReview(): ?Review
-    {
-        return $this->review;
-    }
-
-    public function setReview(?Review $review): self
-    {
-        $this->review = $review;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Office>
