@@ -17,9 +17,6 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $address = null;
-
     #[ORM\Column(length: 255)]
     private ?string $logo = null;
 
@@ -31,6 +28,10 @@ class Company
 
     #[ORM\Column(length: 255)]
     private ?string $siret = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
 
     public function getId(): ?int
     {
@@ -45,18 +46,6 @@ class Company
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -105,6 +94,18 @@ class Company
     public function setSiret(string $siret): self
     {
         $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
