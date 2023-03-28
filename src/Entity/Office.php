@@ -16,8 +16,6 @@ class Office
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $officeid = null;
 
     #[ORM\Column]
     private ?int $price = null;
@@ -41,7 +39,6 @@ class Office
     {
         $this->invoices = new ArrayCollection();
         $this->reservations = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
     }
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -50,8 +47,6 @@ class Office
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Review::class)]
-    private Collection $reviews;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -62,17 +57,9 @@ class Office
         return $this->id;
     }
 
-    public function getOfficeid(): ?int
-    {
-        return $this->officeid;
-    }
 
-    public function setOfficeid(int $officeid): self
-    {
-        $this->officeid = $officeid;
 
-        return $this;
-    }
+
 
     public function getPrice(): ?int
     {
