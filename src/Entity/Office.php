@@ -47,7 +47,6 @@ class Office
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
 
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
@@ -56,10 +55,6 @@ class Office
     {
         return $this->id;
     }
-
-
-
-
 
     public function getPrice(): ?int
     {
