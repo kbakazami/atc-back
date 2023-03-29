@@ -15,9 +15,9 @@ class AddressFixture extends Fixture
 
         for($i = 0; $i < 10; $i++) {
             $address = new Address();
-            $address->setStreet($faker->streetName);
-            $address->setCity($faker->city);
-            $address->setZipcode($faker->postcode);
+            $address->setStreet($faker->streetName());
+            $address->setCity($faker->city());
+            $address->setZipcode($faker->postcode());
             $address->setCountry("France");
             $manager->persist($address);
         }
