@@ -32,9 +32,6 @@ class Review
     private ?Office $officeid = null;
 
 
-
-
-
     public function getId(): ?int
     {
         return $this->id;

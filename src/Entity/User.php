@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+// Pour rajouter des conditions du password
+use symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -24,14 +26,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private array $roles = [];
-
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
-
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Office::class)]
     private Collection $offices;
 
@@ -52,6 +51,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
+
+    #public ?string $confirmpassword;
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
@@ -132,9 +133,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-
-
 
 
     /**
