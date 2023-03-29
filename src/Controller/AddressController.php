@@ -6,73 +6,69 @@ use App\Entity\Address;
 use App\Form\AddressType;
 use App\Repository\AddressRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Serializer\SerializerInterface;
+
 #[Route('/address')]
 class AddressController extends AbstractController
 {
+
     #[Route('/', name: 'app_address_index', methods: ['GET'])]
-    public function index(AddressRepository $addressRepository): Response
+    public function index(AddressRepository $addressRepository, SerializerInterface $serializer): JsonResponse
     {
-        return $this->render('address/index.html.twig', [
-            'addresses' => $addressRepository->findAll(),
-        ]);
+        $addressList = $addressRepository->findAll();
+        $jsonAddressList = $serializer->serialize($addressList, 'json', []);
+        return new JsonResponse($jsonAddressList, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/new', name: 'app_address_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_address_new', methods: ['POST'])]
     public function new(Request $request, AddressRepository $addressRepository): Response
     {
+        $parameters = json_decode($request->getContent(), true);
+
         $address = new Address();
-        $form = $this->createForm(AddressType::class, $address);
-        $form->handleRequest($request);
+        $address->setCountry($parameters['country']);
+        $address->setCity($parameters['city']);
+        $address->setZipCode($parameters['zipCode']);
+        $address->setStreet($parameters['street']);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $addressRepository->save($address, true);
+        $addressRepository->save($address, true);
 
-            return $this->redirectToRoute('app_address_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('address/new.html.twig', [
-            'address' => $address,
-            'form' => $form,
-        ]);
+        return new Response(status: 200);
     }
 
     #[Route('/{id}', name: 'app_address_show', methods: ['GET'])]
-    public function show(Address $address): Response
+    public function show(Address $address, SerializerInterface $serializer): JsonResponse
     {
-        return $this->render('address/show.html.twig', [
-            'address' => $address,
-        ]);
+        $jsonAddress = $serializer->serialize($address, 'json', []);
+        return new JsonResponse($jsonAddress, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/{id}/edit', name: 'app_address_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_address_edit', methods: ['POST'])]
     public function edit(Request $request, Address $address, AddressRepository $addressRepository): Response
     {
-        $form = $this->createForm(AddressType::class, $address);
-        $form->handleRequest($request);
+        $parameters = json_decode($request->getContent(), true);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $addressRepository->save($address, true);
+        $address->setCountry($parameters['country']);
+        $address->setCity($parameters['city']);
+        $address->setZipCode($parameters['zipCode']);
+        $address->setStreet($parameters['street']);
 
-            return $this->redirectToRoute('app_address_index', [], Response::HTTP_SEE_OTHER);
-        }
+        $addressRepository->save($address, true);
 
-        return $this->renderForm('address/edit.html.twig', [
-            'address' => $address,
-            'form' => $form,
-        ]);
+        return new Response(status: 200);
     }
 
-    #[Route('/{id}', name: 'app_address_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_address_delete', methods: ['DELETE'])]
     public function delete(Request $request, Address $address, AddressRepository $addressRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$address->getId(), $request->request->get('_token'))) {
-            $addressRepository->remove($address, true);
-        }
+//        if ($this->isCsrfTokenValid('delete' . $address->getId(), $request->request->get('_token'))) {}
+        $addressRepository->remove($address, true);
 
-        return $this->redirectToRoute('app_address_index', [], Response::HTTP_SEE_OTHER);
+        return new Response(status: 200);
     }
 }
