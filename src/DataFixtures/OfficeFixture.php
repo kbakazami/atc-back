@@ -30,6 +30,7 @@ class OfficeFixture extends Fixture implements DependentFixtureInterface
             $office->setIsFiber($faker->boolean());
             $office->setIsKitchen($faker->boolean());
             $office->setIsPublished($faker->boolean());
+            $office->setOwner($faker->randomElement([$this->getReference('user')]));
             $manager->persist($office);
         }
 
