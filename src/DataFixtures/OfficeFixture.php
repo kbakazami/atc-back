@@ -20,11 +20,16 @@ class OfficeFixture extends Fixture implements DependentFixtureInterface
             $office->setAddress($faker->randomElement([$this->getReference('address')]));
             $office->setPrice($faker->randomNumber(3));
             $office->setSurface($faker->randomNumber(2));
-            $office->setDuration($faker->randomElement(['matin', 'après-midi', 'journée']));
             $office->setImage($faker->imageUrl(640, 480, 'office'));
-            $office->setUser($faker->randomElement([$this->getReference('user')]));
+            // $office->setUser($faker->randomElement([$this->getReference('user')]));
             $office->setName($faker->name());
             $office->setDescription($faker->text());
+            $office->setIsComputer($faker->boolean());
+            $office->setIsScreen($faker->boolean());
+            $office->setIsMouseKeyboard($faker->boolean());
+            $office->setIsFiber($faker->boolean());
+            $office->setIsKitchen($faker->boolean());
+            $office->setIsPublished($faker->boolean());
             $manager->persist($office);
         }
 
