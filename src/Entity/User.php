@@ -284,10 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Review>
-     */
-    public function getReviews(): Collection
+    public function getAddress(): ?Address
     {
         return $this->reviews;
     }

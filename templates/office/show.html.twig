@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Office{% endblock %}
+
+{% block body %}
+    <h1>Office</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ office.id }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ office.price }}</td>
+            </tr>
+            <tr>
+                <th>Surface</th>
+                <td>{{ office.surface }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ office.duration }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ office.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_office_index') }}">back to list</a>
+
+    <a href="{{ path('app_office_edit', {'id': office.id}) }}">edit</a>
+
+    {{ include('office/_delete_form.html.twig') }}
+{% endblock %}

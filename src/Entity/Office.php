@@ -47,6 +47,7 @@ class Office
     #[ORM\ManyToOne(inversedBy: 'offices')]
     private ?User $user = null;
 
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address = null;
