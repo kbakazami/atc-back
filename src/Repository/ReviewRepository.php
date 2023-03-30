@@ -39,6 +39,25 @@ class ReviewRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllByOfficeId($officeId)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.office = :officeId')
+            ->setParameter('officeId', $officeId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllByOfficeIdAverageNote($officeId)
+    {
+        return $this->createQueryBuilder('r')
+            ->select("avg(r.note)")
+            ->where('r.office = :officeId')
+            ->setParameter('officeId', $officeId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Review[] Returns an array of Review objects
 //     */
