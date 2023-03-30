@@ -25,6 +25,9 @@ class OfficeDetailItem {
     private $reviews;
     private $reviewAverage;
 
+    private $ownerFirstName;
+    private $ownerLastName;
+
     /**
      * @return mixed
      */
@@ -311,6 +314,38 @@ class OfficeDetailItem {
     public function setReviewAverage($reviewAverage): void
     {
         $this->reviewAverage = $reviewAverage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwnerFirstName()
+    {
+        return $this->ownerFirstName;
+    }
+
+    /**
+     * @param mixed $ownerFirstName
+     */
+    public function setOwnerFirstName($ownerFirstName): void
+    {
+        $this->ownerFirstName = $ownerFirstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwnerLastName()
+    {
+        return $this->ownerLastName;
+    }
+
+    /**
+     * @param mixed $ownerLastName
+     */
+    public function setOwnerLastName($ownerLastName): void
+    {
+        $this->ownerLastName = $ownerLastName;
     }
 
 }

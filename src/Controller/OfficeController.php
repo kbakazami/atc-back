@@ -149,7 +149,6 @@ class OfficeController extends AbstractController
                     $reviewItem->setTitle($review->getTitle());
                     $reviewItem->setMessage($review->getMessage());
                     $reviewItem->setNote($review->getNote());
-//                    $reviewItem->setCreatedAt($review->getCreatedAt());
                     if ($review->getUser())
                     {
                         $userId = $review->getUser()->getId();
@@ -166,6 +165,18 @@ class OfficeController extends AbstractController
             }
             $officeDetaiItem->setReviews($reviewList);
         }
+
+        if ($office->getOwner())
+        {
+            $ownerId = $office->getOwner()->getId();
+            $owner = $this->entityManager->getRepository(User::class)->find($ownerId);
+
+            $officeDetaiItem->setOwnerFirstName($owner->getFirstName());
+            $officeDetaiItem->setOwnerLastName($owner->getLastName());
+        }else {
+            $owner = null;
+        }
+
         $data = $this->serializer->serialize($officeDetaiItem, JsonEncoder::FORMAT);
         return new Response($data);
     }

@@ -8,7 +8,6 @@ class ReviewByOfficeItem {
     private $title;
     private $message;
     private $note;
-    private $createdAt;
     private $userFirstName;
     private $userLastName;
 
@@ -74,22 +73,6 @@ class ReviewByOfficeItem {
     public function setNote($note): void
     {
         $this->note = $note;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
     }
 
     /**
