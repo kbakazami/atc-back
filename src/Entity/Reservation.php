@@ -36,7 +36,7 @@ class Reservation
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+        public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -60,7 +60,7 @@ class Reservation
         return $this->office;
     }
 
-    public function setOffice(?Office $office): self
+    public function setOffice(Office $office): self
     {
         $this->office = $office;
 
@@ -72,7 +72,7 @@ class Reservation
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
