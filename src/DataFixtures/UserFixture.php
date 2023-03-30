@@ -27,11 +27,20 @@ class UserFixture extends Fixture
             $user->setPassword($this->hasher->hashPassword($user, $faker->password));
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);
+            $user->setAddress($faker->randomElement([$this->getReference('address')]));
             $user->setTelephoneNumber($faker->phoneNumber);
+            $user->setDescription($faker->text());
             $manager->persist($user);
         }
 
         $this->addReference('user', $user);
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            AddressFixture::class,
+        ];
     }
 }

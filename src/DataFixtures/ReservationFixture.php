@@ -19,7 +19,6 @@ class ReservationFixture extends Fixture implements DependentFixtureInterface
             $reservation->setOffice($faker->randomElement([$this->getReference('office')]));
             $reservation->setUser($faker->randomElement([$this->getReference('user')]));
             $reservation->setTimeSlot($faker->randomElement(['matin', 'après-midi', 'journée']));
-            $reservation->setInvoice($faker->randomElement([$this->getReference('invoice')]));
             $reservation->setDate($faker->dateTime);
             $manager->persist($reservation);
         }
@@ -31,7 +30,6 @@ class ReservationFixture extends Fixture implements DependentFixtureInterface
         return [
             OfficeFixture::class,
             UserFixture::class,
-            InvoiceFixture::class,
         ];
     }
 }

@@ -16,8 +16,8 @@ class ReviewFixture extends Fixture implements DependentFixtureInterface
 
         for($i = 0; $i < 10; $i++) {
             $review = new Review();
-            $review->setOfficeid($faker->randomElement([$this->getReference('office')]));
-            $review->setUserid($faker->randomElement([$this->getReference('user')]));
+            $review->setOffice($faker->randomElement([$this->getReference('office')]));
+            $review->setUser($faker->randomElement([$this->getReference('user')]));
             $review->setTitle($faker->sentence(4));
             $review->setNote($faker->randomElement(['1', '2', '3', '4', '5']));
             $review->setMessage($faker->text(255));
