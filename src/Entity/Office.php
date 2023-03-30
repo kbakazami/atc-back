@@ -59,6 +59,10 @@ class Office
     #[ORM\Column]
     private ?bool $isPublished = null;
 
+    #[ORM\ManyToOne(inversedBy: 'offices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
 
     public function __construct()
     {
@@ -271,6 +275,18 @@ class Office
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
