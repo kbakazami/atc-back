@@ -24,16 +24,11 @@ class Review
     #[ORM\Column(nullable: true)]
     private ?int $note = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reviews')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $userid = null;
+    #[ORM\ManyToOne(inversedBy: 'review')]
+    private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reviews')]
-    private ?Office $officeid = null;
-
-
-
-
+    #[ORM\ManyToOne(inversedBy: 'review')]
+    private ?Office $office = null;
 
     public function getId(): ?int
     {
@@ -76,27 +71,28 @@ class Review
         return $this;
     }
 
-    public function getUserid(): ?User
+    public function getUser(): ?User
     {
-        return $this->userid;
+        return $this->user;
     }
 
-    public function setUserid(?User $userid): self
+    public function setUser(?User $user): self
     {
-        $this->userid = $userid;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getOfficeid(): ?Office
+    public function getOffice(): ?Office
     {
-        return $this->officeid;
+        return $this->office;
     }
 
-    public function setOfficeid(?Office $officeid): self
+    public function setOffice(?Office $office): self
     {
-        $this->officeid = $officeid;
+        $this->office = $office;
 
         return $this;
     }
+
 }

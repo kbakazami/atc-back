@@ -16,7 +16,6 @@ class Office
     #[ORM\Column]
     private ?int $id = null;
 
-
     #[ORM\Column]
     private ?int $price = null;
 
@@ -24,39 +23,48 @@ class Office
     private ?string $surface = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $duration = null;
-
-    #[ORM\ManyToOne(inversedBy: 'officeid')]
-    private ?Review $review = null;
-
-    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
-    private Collection $invoices;
-
-    #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Reservation::class, orphanRemoval: true)]
-    private Collection $reservations;
-
-    public function __construct()
-    {
-        $this->invoices = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
-    }
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
-
-    #[ORM\ManyToOne(inversedBy: 'offices')]
-    private ?User $user = null;
-
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'office', targetEntity: Review::class)]
+    private Collection $review;
+
+    #[ORM\ManyToOne(inversedBy: 'offices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
+
+    #[ORM\OneToMany(mappedBy: 'office', targetEntity: Reservation::class)]
+    private Collection $reservations;
+
+    #[ORM\Column]
+    private ?bool $isFiber = null;
+
+    #[ORM\Column]
+    private ?bool $isComputer = null;
+
+    #[ORM\Column]
+    private ?bool $isScreen = null;
+
+    #[ORM\Column]
+    private ?bool $isMouseKeyboard = null;
+
+    #[ORM\Column]
+    private ?bool $isKitchen = null;
+
+    #[ORM\Column]
+    private ?bool $isPublished = null;
+
+
+    public function __construct()
+    {
+        $this->review = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,48 +95,80 @@ class Office
         return $this;
     }
 
-    public function getDuration(): ?string
+    public function getImage(): ?string
     {
-        return $this->duration;
+        return $this->image;
     }
 
-    public function setDuration(?string $duration): self
+    public function setImage(?string $image): self
     {
-        $this->duration = $duration;
+        $this->image = $image;
 
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
+        return $this;
+    }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 
     /**
-     * @return Collection<int, Invoice>
+     * @return Collection<int, Review>
      */
-    public function getInvoices(): Collection
+    public function getReview(): Collection
     {
-        return $this->invoices;
+        return $this->review;
     }
 
-    public function addInvoice(Invoice $invoice): self
+    public function addReview(Review $review): self
     {
-        if (!$this->invoices->contains($invoice)) {
-            $this->invoices->add($invoice);
-            $invoice->setOffice($this);
+        if (!$this->review->contains($review)) {
+            $this->review->add($review);
+            $review->setOffice($this);
         }
 
         return $this;
     }
 
-    public function removeInvoice(Invoice $invoice): self
+    public function removeReview(Review $review): self
     {
-        if ($this->invoices->removeElement($invoice)) {
+        if ($this->review->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($invoice->getOffice() === $this) {
-                $invoice->setOffice(null);
+            if ($review->getOffice() === $this) {
+                $review->setOffice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
@@ -163,93 +203,76 @@ class Office
         return $this;
     }
 
-    public function getImage(): ?string
+    public function isIsFiber(): ?bool
     {
-        return $this->image;
+        return $this->isFiber;
     }
 
-    public function setImage(?string $image): self
+    public function setIsFiber(bool $isFiber): self
     {
-        $this->image = $image;
+        $this->isFiber = $isFiber;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function isIsComputer(): ?bool
     {
-        return $this->user;
+        return $this->isComputer;
     }
 
-    public function setUser(?User $user): self
+    public function setIsComputer(bool $isComputer): self
     {
-        $this->user = $user;
+        $this->isComputer = $isComputer;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Review>
-     */
-    public function getReviews(): Collection
+    public function isIsScreen(): ?bool
     {
-        return $this->reviews;
+        return $this->isScreen;
     }
 
-    public function addReview(Review $review): self
+    public function setIsScreen(bool $isScreen): self
     {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews->add($review);
-            $review->setOfficeid($this);
-        }
+        $this->isScreen = $isScreen;
 
         return $this;
     }
 
-    public function removeReview(Review $review): self
+    public function isIsMouseKeyboard(): ?bool
     {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getOfficeid() === $this) {
-                $review->setOfficeid(null);
-            }
-        }
+        return $this->isMouseKeyboard;
+    }
+
+    public function setIsMouseKeyboard(bool $isMouseKeyboard): self
+    {
+        $this->isMouseKeyboard = $isMouseKeyboard;
 
         return $this;
     }
 
-    public function getAddress(): ?Address
+    public function isIsKitchen(): ?bool
     {
-        return $this->address;
+        return $this->isKitchen;
     }
 
-    public function setAddress(?Address $address): self
+    public function setIsKitchen(bool $isKitchen): self
     {
-        $this->address = $address;
+        $this->isKitchen = $isKitchen;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function isIsPublished(): ?bool
     {
-        return $this->description;
+        return $this->isPublished;
     }
 
-    public function setDescription(?string $description): self
+    public function setIsPublished(bool $isPublished): self
     {
-        $this->description = $description;
+        $this->isPublished = $isPublished;
 
         return $this;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 }
