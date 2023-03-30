@@ -33,12 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userid')]
-    private ?Review $review = null;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Office::class)]
-    private Collection $offices;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstName = null;
 
@@ -51,21 +45,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Invoice::class, orphanRemoval: true)]
-    private Collection $invoices;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Review::class)]
+    private Collection $review;
 
-    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Reservation::class, orphanRemoval: true)]
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Address $address = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]
     private Collection $reservations;
-
-    #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Review::class, orphanRemoval: true)]
-    private Collection $reviews;
 
     public function __construct()
     {
-        $this->offices = new ArrayCollection();
-        $this->invoices = new ArrayCollection();
+        $this->review = new ArrayCollection();
         $this->reservations = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,43 +131,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function setReview(?Review $review): self
-    {
-        $this->review = $review;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Office>
-     */
-    public function getOffices(): Collection
-    {
-        return $this->offices;
-    }
-
-    public function addOffice(Office $office): self
-    {
-        if (!$this->offices->contains($office)) {
-            $this->offices->add($office);
-            $office->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOffice(Office $office): self
-    {
-        if ($this->offices->removeElement($office)) {
-            // set the owning side to null (unless already changed)
-            if ($office->getUser() === $this) {
-                $office->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -225,31 +180,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Invoice>
+     * @return Collection<int, Review>
      */
-    public function getInvoices(): Collection
+    public function getReview(): Collection
     {
-        return $this->invoices;
+        return $this->review;
     }
 
-    public function addInvoice(Invoice $invoice): self
+    public function addReview(Review $review): self
     {
-        if (!$this->invoices->contains($invoice)) {
-            $this->invoices->add($invoice);
-            $invoice->setUser($this);
+        if (!$this->review->contains($review)) {
+            $this->review->add($review);
+            $review->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeInvoice(Invoice $invoice): self
+    public function removeReview(Review $review): self
     {
-        if ($this->invoices->removeElement($invoice)) {
+        if ($this->review->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($invoice->getUser() === $this) {
-                $invoice->setUser(null);
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
@@ -284,30 +251,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAddress(): ?Address
-    {
-        return $this->reviews;
-    }
-
-    public function addReview(Review $review): self
-    {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews->add($review);
-            $review->setUserid($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReview(Review $review): self
-    {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getUserid() === $this) {
-                $review->setUserid(null);
-            }
-        }
-
-        return $this;
-    }
 }

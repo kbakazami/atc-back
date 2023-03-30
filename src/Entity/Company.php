@@ -29,8 +29,7 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $siret = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
     private ?Address $address = null;
 
     public function getId(): ?int
@@ -103,7 +102,7 @@ class Company
         return $this->address;
     }
 
-    public function setAddress(Address $address): self
+    public function setAddress(?Address $address): self
     {
         $this->address = $address;
 
