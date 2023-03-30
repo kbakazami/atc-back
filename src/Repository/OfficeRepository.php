@@ -65,6 +65,23 @@ class OfficeRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findByPrice(int $price)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $qb->where('o.price <= :price')
+            ->setParameter('price', $price);
+
+        return $qb->getQuery()->getResult();
+    }
+    //    public function findOneBySomeField($value): ?Office
+    //    {
+    //        return $this->createQueryBuilder('o')
+    //            ->andWhere('o.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 
     public function findBySurface(float $surface)
     {
