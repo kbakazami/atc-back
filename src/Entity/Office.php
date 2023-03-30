@@ -23,12 +23,6 @@ class Office
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
     private ?string $surface = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $duration = null;
-
-    #[ORM\ManyToOne(inversedBy: 'officeid')]
-    private ?Review $review = null;
-
     #[ORM\OneToMany(mappedBy: 'officeid', targetEntity: Invoice::class)]
     private Collection $invoices;
 
@@ -56,6 +50,24 @@ class Office
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\Column]
+    private ?bool $fiber = null;
+
+    #[ORM\Column]
+    private ?bool $computer = null;
+
+    #[ORM\Column]
+    private ?bool $screen = null;
+
+    #[ORM\Column]
+    private ?bool $mouse_keyboard = null;
+
+    #[ORM\Column]
+    private ?bool $kitchen = null;
+
+    #[ORM\Column]
+    private ?bool $is_published = null;
 
     public function getId(): ?int
     {
@@ -85,21 +97,6 @@ class Office
 
         return $this;
     }
-
-    public function getDuration(): ?string
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?string $duration): self
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-
-
 
 
     /**
@@ -194,28 +191,6 @@ class Office
         return $this->reviews;
     }
 
-    public function addReview(Review $review): self
-    {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews->add($review);
-            $review->setOfficeid($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReview(Review $review): self
-    {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getOfficeid() === $this) {
-                $review->setOfficeid(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAddress(): ?Address
     {
         return $this->address;
@@ -248,6 +223,78 @@ class Office
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function isFiber(): ?bool
+    {
+        return $this->fiber;
+    }
+
+    public function setFiber(bool $fiber): self
+    {
+        $this->fiber = $fiber;
+
+        return $this;
+    }
+
+    public function isComputer(): ?bool
+    {
+        return $this->computer;
+    }
+
+    public function setComputer(bool $computer): self
+    {
+        $this->computer = $computer;
+
+        return $this;
+    }
+
+    public function isScreen(): ?bool
+    {
+        return $this->screen;
+    }
+
+    public function setScreen(bool $screen): self
+    {
+        $this->screen = $screen;
+
+        return $this;
+    }
+
+    public function isMouseKeyboard(): ?bool
+    {
+        return $this->mouse_keyboard;
+    }
+
+    public function setMouseKeyboard(bool $mouse_keyboard): self
+    {
+        $this->mouse_keyboard = $mouse_keyboard;
+
+        return $this;
+    }
+
+    public function isKitchen(): ?bool
+    {
+        return $this->kitchen;
+    }
+
+    public function setKitchen(bool $kitchen): self
+    {
+        $this->kitchen = $kitchen;
+
+        return $this;
+    }
+
+    public function isIsPublished(): ?bool
+    {
+        return $this->is_published;
+    }
+
+    public function setIsPublished(bool $is_published): self
+    {
+        $this->is_published = $is_published;
 
         return $this;
     }

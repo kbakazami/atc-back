@@ -33,9 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userid')]
-    private ?Review $review = null;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Office::class)]
     private Collection $offices;
 
@@ -59,6 +56,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'userid', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
+
+    #[ORM\ManyToOne]
+    private ?Address $address = null;
 
     public function __construct()
     {
@@ -136,14 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-
-    public function setReview(?Review $review): self
-    {
-        $this->review = $review;
-
-        return $this;
     }
 
     /**
@@ -292,24 +284,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->reviews;
     }
 
-    public function addReview(Review $review): self
+    public function getAddress(): ?Address
     {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews->add($review);
-            $review->setUserid($this);
-        }
-
-        return $this;
+        return $this->address;
     }
 
-    public function removeReview(Review $review): self
+    public function setAddress(?Address $address): self
     {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getUserid() === $this) {
-                $review->setUserid(null);
-            }
-        }
+        $this->address = $address;
 
         return $this;
     }
