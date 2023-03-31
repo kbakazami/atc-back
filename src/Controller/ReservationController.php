@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
+use App\Model\ReservationItem;
 use DateTime;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,27 +28,67 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ReservationController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private SerializerInterface $serializer;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
     {
         $this->entityManager = $entityManager;
+        $this->serializer = $serializer;
     }
 
 
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository  ): JsonResponse
+    public function index(): Response
     {
-        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        $reservations = $this->entityManager->getRepository(Reservation::class)->findAll();
+        $reservationList = [];
 
-        $reservationList = $reservationRepository->findAll();
-        $jsonReservationList = $serializer->serialize($reservationList, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
+        if($reservations)
+        {
+            foreach ($reservations as $reservation)
+            {
+                $reservationItem = new ReservationItem();
+                $reservationItem->setId($reservation->getId());
+                $reservationItem->setDate($reservation->getDate());
+                $reservationItem->setTimeSlot($reservation->getTimeSlot());
+
+                if($reservation->getUser())
+                {
+                    $userId = $reservation->getUser()->getId();
+                    $user = $this->entityManager->getRepository(User::class)->find($userId);
+
+                    $reservationItem->setUserFirstName($user->getFirstName());
+                    $reservationItem->setUserLastName($user->getLastName());
+                    $reservationItem->setUserEmail($user->getEmail());
+                }
+
+                if($reservation->getOffice())
+                {
+                    $officeId = $reservation->getOffice()->getId();
+                    $office = $this->entityManager->getRepository(Office::class)->find($officeId);
+
+                    $ownerId = $office->getOwner()->getId();
+                    $owner = $this->entityManager->getRepository(User::class)->find($ownerId);
+
+                    $addressId = $office->getAddress()->getId();
+                    $address = $this->entityManager->getRepository(Address::class)->find($addressId);
+
+                    $reservationItem->setOwnerFirstName($owner->getFirstName());
+                    $reservationItem->setOwnerLastName($owner->getLastName());
+                    $reservationItem->setOwnerEmail($owner->getEmail());
+                    $reservationItem->setOfficeName($office->getName());
+                    $reservationItem->setOfficePrice($office->getPrice());
+                    $reservationItem->setOfficeCountry($address->getCountry());
+                    $reservationItem->setOfficeCity($address->getCity());
+                    $reservationItem->setOfficeZipCode($address->getZipCode());
+                    $reservationItem->setOfficeStreet($address->getStreet());
+                }
+
+                $reservationList[$reservation->getId()] = $reservationItem;
             }
-        ]);
-        return new JsonResponse($jsonReservationList, Response::HTTP_OK, [], true);
+        }
+        $data = $this->serializer->serialize(array_values($reservationList), JsonEncoder::FORMAT);
+        return new Response($data);
     }
 
     #[Route('/new', name: 'app_reservation_new', methods: ['POST'])]
