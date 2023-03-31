@@ -24,6 +24,7 @@ class OfficeDetailItem {
 
     private $reviews;
     private $reviewAverage;
+    private $reviewCount;
 
     private $ownerFirstName;
     private $ownerLastName;
@@ -346,6 +347,22 @@ class OfficeDetailItem {
     public function setOwnerLastName($ownerLastName): void
     {
         $this->ownerLastName = $ownerLastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReviewCount()
+    {
+        return $this->reviewCount;
+    }
+
+    /**
+     * @param mixed $reviewCount
+     */
+    public function setReviewCount($reviewCount): void
+    {
+        $this->reviewCount = $reviewCount;
     }
 
 }

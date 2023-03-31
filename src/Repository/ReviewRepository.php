@@ -58,6 +58,16 @@ class ReviewRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllByOfficeIdCount($officeId)
+    {
+        return $this->createQueryBuilder('r')
+            ->select("count(r.id)")
+            ->where('r.office = :officeId')
+            ->setParameter('officeId', $officeId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Review[] Returns an array of Review objects
 //     */
