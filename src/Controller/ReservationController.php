@@ -104,7 +104,7 @@ class ReservationController extends AbstractController
         $reservation->setUser($user);
         $reservation->setOffice($office);
         $reservation->setDate($date);
-        $reservation->setTimeSlot($parameters['time_slot']);
+        $reservation->setTimeSlot($parameters['duration']);
 
         $reservationRepository->save($reservation, true);
 

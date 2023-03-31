@@ -133,12 +133,20 @@ class OfficeController extends AbstractController
         if($office->getReview())
         {
             $reviewsAverage = $this->entityManager->getRepository(Review::class)->findAllByOfficeIdAverageNote($office->getId());
+            $reviewsCount = $this->entityManager->getRepository(Review::class)->findAllByOfficeIdCount($office->getId());
             $reviews = $this->entityManager->getRepository(Review::class)->findAllByOfficeId($office->getId());
             if($reviewsAverage)
             {
                 $officeDetaiItem->setReviewAverage(round($reviewsAverage[0][1],2));
             }else {
                 $reviewsAverage = null;
+            }
+
+            if($reviewsCount)
+            {
+                $officeDetaiItem->setReviewCount($reviewsCount[0][1]);
+            } else {
+                $reviewsCount = null;
             }
 
             if($reviews)
