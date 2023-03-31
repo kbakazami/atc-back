@@ -23,6 +23,7 @@ class Office
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
     private ?string $surface = null;
 
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $duration = null;
 
