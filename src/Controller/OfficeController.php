@@ -63,7 +63,7 @@ class OfficeController extends AbstractController
                     $reviewsAverage = $this->entityManager->getRepository(Review::class)->findAllByOfficeIdAverageNote($office->getId());
                     if($reviewsAverage)
                     {
-                        $officeItem->setReviewAverage($reviewsAverage);
+                        $officeItem->setReviewAverage(round($reviewsAverage[0][1],2));
                     }
 
                 } else {
@@ -136,7 +136,7 @@ class OfficeController extends AbstractController
             $reviews = $this->entityManager->getRepository(Review::class)->findAllByOfficeId($office->getId());
             if($reviewsAverage)
             {
-                $officeDetaiItem->setReviewAverage($reviewsAverage);
+                $officeDetaiItem->setReviewAverage(round($reviewsAverage[0][1],2));
             }else {
                 $reviewsAverage = null;
             }
